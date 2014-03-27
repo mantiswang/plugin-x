@@ -77,33 +77,33 @@ public class ResultChecker {
 		return retVal;
 	}
 	
-	int getResultStatus() {
-		int ret = 9000;
-		try {
-			JSONObject objContent = BaseHelper.string2JSON(this.mContent, ";");
-			String result = objContent.getString("resultStatus");
-			result = result.substring(1, result.length() - 1);
-			
-			ret = Integer.parseInt(result);
-		} catch (Exception e) {
-			e.printStackTrace();
-			ret = 4001;
-		}
-		return ret;
-	}
-
-	private static final int PAY_SUCCESS_STATUS_CODE = 9000;
-	public boolean isPayOk() {
-		boolean isPayOk = false;
-
-		String success = getSuccess();
-		if (success.equalsIgnoreCase("true") &&
-			checkSign() == RESULT_CHECK_SIGN_SUCCEED &&
-			PAY_SUCCESS_STATUS_CODE == getResultStatus())
-		{
-			isPayOk = true;
-		}
-
-		return isPayOk;
-	}
+//	int getResultStatus() {
+//		int ret = 9000;
+//		try {
+//			JSONObject objContent = BaseHelper.string2JSON(this.mContent, ";");
+//			String result = objContent.getString("resultStatus");
+//			result = result.substring(1, result.length() - 1);
+//			
+//			ret = Integer.parseInt(result);
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//			ret = 4001;
+//		}
+//		return ret;
+//	}
+//
+//	private static final int PAY_SUCCESS_STATUS_CODE = 9000;
+//	public boolean isPayOk() {
+//		boolean isPayOk = false;
+//
+//		String success = getSuccess();
+//		if (success.equalsIgnoreCase("true") &&
+//			checkSign() == RESULT_CHECK_SIGN_SUCCEED &&
+//			PAY_SUCCESS_STATUS_CODE == getResultStatus())
+//		{
+//			isPayOk = true;
+//		}
+//
+//		return isPayOk;
+//	}
 }
