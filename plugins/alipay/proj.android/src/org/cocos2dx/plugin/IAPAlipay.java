@@ -200,7 +200,6 @@ public class IAPAlipay implements InterfaceIAP {
 		                    {
 		                    	// 对通知进行验签
 								ResultChecker resultChecker = new ResultChecker(strRet);
-
 								int retVal = resultChecker.checkSign();
 								// 返回验签结果以及交易状态
 								if (retVal == ResultChecker.RESULT_CHECK_SIGN_FAILED) {
