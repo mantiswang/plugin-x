@@ -54,7 +54,6 @@ public class ResultChecker {
 			/**
 			 * 用户取消操作，返回值为
 			 * resultStatus={6001};memo={操作已经取消。};result={}
-			 * 
 			 * 下面对result的处理会出现NullPointException
 			 */
 			String result = objContent.getString("result");
