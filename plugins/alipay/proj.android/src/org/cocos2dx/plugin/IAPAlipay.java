@@ -168,7 +168,9 @@ public class IAPAlipay implements InterfaceIAP {
 			mcontext.onKeyDown(KeyEvent.KEYCODE_BACK, null);
 		}
 	}
-
+	
+	private static final int PAY_SUCCESS_STATUS_CODE = 9000;
+	
 	private static void initUIHandle() {
 		//
 		// the handler use to receive the pay result.
@@ -186,24 +188,34 @@ public class IAPAlipay implements InterfaceIAP {
 
 						// 从通知中获取参数
 						try {
-							// 获取交易状态，具体状态代码请参看文档
-							String memo = "memo=";
-							int imemoStart = strRet.indexOf("memo=");
-							imemoStart += memo.length();
-							int imemoEnd = strRet.indexOf(";result=");
-							memo = strRet.substring(imemoStart, imemoEnd);
-							// 对通知进行验签
-							ResultChecker resultChecker = new ResultChecker(strRet);
+		                    // 获取交易状态码，具体状态代码请参看文档
+		                    String tradeStatus = "resultStatus={";
+		                    int imemoStart = strRet.indexOf("resultStatus=");
+		                    imemoStart += tradeStatus.length();
 
-							int retVal = resultChecker.checkSign();
-							// 返回验签结果以及交易状态
-							if (retVal == ResultChecker.RESULT_CHECK_SIGN_FAILED) {
-								payResult(IAPWrapper.PAYRESULT_FAIL, "签名验证失败");
-							} else if (retVal == ResultChecker.RESULT_CHECK_SIGN_SUCCEED && resultChecker.isPayOk()) {
-								payResult(IAPWrapper.PAYRESULT_SUCCESS, "支付成功");
-							} else {
-								payResult(IAPWrapper.PAYRESULT_FAIL, "支付失败");
-							}
+		                    int imemoEnd = imemoStart + 4;
+		                    tradeStatus = strRet.substring(imemoStart, imemoEnd);
+		                    int statusCode = Integer.valueOf(tradeStatus);
+		                    if(statusCode == PAY_SUCCESS_STATUS_CODE)
+		                    {
+		                    	// 对通知进行验签
+								ResultChecker resultChecker = new ResultChecker(strRet);
+
+								int retVal = resultChecker.checkSign();
+								// 返回验签结果以及交易状态
+								if (retVal == ResultChecker.RESULT_CHECK_SIGN_FAILED) {
+									payResult(IAPWrapper.PAYRESULT_FAIL, "签名验证失败");
+								} else if (retVal == ResultChecker.RESULT_CHECK_SIGN_SUCCEED/* && resultChecker.isPayOk()*/) {
+									payResult(IAPWrapper.PAYRESULT_SUCCESS, "支付成功");
+								} else {
+									payResult(IAPWrapper.PAYRESULT_FAIL, "支付失败");
+								}
+		                    }
+		                    else
+		                    {
+		                    	payResult(IAPWrapper.PAYRESULT_FAIL, "支付失败");
+		                    }
+							
 						} catch (Exception e) {
 							e.printStackTrace();
 							payResult(IAPWrapper.PAYRESULT_FAIL, "结果解析失败");
